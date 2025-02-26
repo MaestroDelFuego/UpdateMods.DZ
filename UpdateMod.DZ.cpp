@@ -17,7 +17,7 @@ std::vector<std::string> getModList() {
     std::vector<std::string> modList;
     try {
         // Iterate over the server mods directory to find mods starting with '@'
-        for (const auto& entry : fs::directory_iterator(getConfigValue("SERVER_MODS_DIR"))) {
+        for (const auto& entry : fs::directory_iterator(SERVER_MODS_DIR)) {
             if (fs::is_directory(entry.path())) {
                 std::string modName = entry.path().filename().string();
 
