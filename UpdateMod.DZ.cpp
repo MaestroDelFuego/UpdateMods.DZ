@@ -12,18 +12,26 @@ const fs::path SERVER_MODS_DIR = "H:/DayZServer"; // Your Server folder
 const fs::path SERVER_EXECUTABLE = "H:/DayZServer/DayZServer_x64.exe"; // Your Server EXE
 const fs::path SERVER_KEYS_DIR = "H:/DayZServer/keys"; // Server keys directory
 
+// Function to get the list of mods that start with '@' in the server mods directory
 std::vector<std::string> getModList() {
     std::vector<std::string> modList;
     try {
-        for (const auto& entry : fs::directory_iterator(SERVER_MODS_DIR)) {
+        // Iterate over the server mods directory to find mods starting with '@'
+        for (const auto& entry : fs::directory_iterator(getConfigValue("SERVER_MODS_DIR"))) {
             if (fs::is_directory(entry.path())) {
-                modList.push_back("@" + entry.path().filename().string());
+                std::string modName = entry.path().filename().string();
+
+                // Only add the mod to the list if it starts with "@"
+                if (modName.rfind("@", 0) == 0) {
+                    modList.push_back(modName);  // Do not add an extra "@"
+                }
             }
         }
     }
     catch (const fs::filesystem_error& e) {
         std::cerr << "Filesystem error while reading mods directory: " << e.what() << "\n";
     }
+
     return modList;
 }
 
