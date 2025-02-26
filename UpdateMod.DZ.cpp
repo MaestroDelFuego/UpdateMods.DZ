@@ -21,6 +21,9 @@ std::vector<std::string> getModList() {
             if (fs::is_directory(entry.path())) {
                 std::string modName = entry.path().filename().string();
 
+                // Debugging output to check what mods are found
+                std::cout << "Found mod: " << modName << std::endl;
+
                 // Only add the mod to the list if it starts with "@"
                 if (modName.rfind("@", 0) == 0) {
                     modList.push_back(modName);  // Do not add an extra "@"
@@ -35,16 +38,22 @@ std::vector<std::string> getModList() {
     return modList;
 }
 
+// Function to generate the mod parameter string for the DayZ server
 std::string generateModParameter(const std::vector<std::string>& mods) {
     std::string modParam = "-mod=";
     for (size_t i = 0; i < mods.size(); ++i) {
-        modParam += mods[i];
+        // Replace spaces with underscores (or any other character you prefer)
+        std::string mod = mods[i];
+        std::replace(mod.begin(), mod.end(), ' ', '_');  // Replace spaces with underscores
+        modParam += mod;
         if (i < mods.size() - 1) {
             modParam += ";";
         }
     }
     return modParam;
 }
+
+
 
 size_t countFilesToCopy(const fs::path& directory) {
     size_t fileCount = 0;
